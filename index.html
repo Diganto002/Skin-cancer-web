@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Skin Cancer Diagnosis</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-icon">⚙️</span>
+        <h2 class="sidebar-title">AI Engine Settings</h2>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Select AI Model</p>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="ai-model" value="auto" checked />
+            <span class="radio-custom"></span>
+            <span class="radio-text">Auto-Select (Dual AI Engine)</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="ai-model" value="efficientnet" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">EfficientNetB3</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="ai-model" value="densenet" />
+            <span class="radio-custom"></span>
+            <span class="radio-text">DenseNet121</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="sidebar-label">Model Info</p>
+        <div class="model-info-card" id="model-info-card">
+          <p class="model-info-text" id="model-info-text">
+            Automatically selects the best of both EfficientNetB3 and DenseNet121 for highest accuracy.
+          </p>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-dot"></div>
+        <span class="status-text">AI Engine Ready</span>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <header class="main-header">
+        <div class="header-left">
+          <span class="header-icon">🩺</span>
+          <div>
+            <h1 class="header-title">Advanced Skin Cancer Diagnosis</h1>
+            <p class="header-subtitle">AI-powered dermatological analysis using deep learning</p>
+          </div>
+        </div>
+        <div class="header-badge">
+          <span class="badge-dot"></span>
+          <span>Beta v2.0</span>
+        </div>
+      </header>
+
+      <!-- Upload Section -->
+      <section class="upload-section">
+        <div
+          class="drop-zone"
+          id="drop-zone"
+          role="button"
+          tabindex="0"
+          aria-label="Upload skin lesion image"
+        >
+          <div class="drop-zone-inner">
+            <div class="drop-zone-icon">🖼️</div>
+            <h3 class="drop-zone-title">Drop your skin lesion image here</h3>
+            <p class="drop-zone-subtitle">or click to browse — supports JPG, PNG, WEBP</p>
+            <button class="upload-btn" id="upload-btn" type="button">Choose Image</button>
+          </div>
+          <input
+            type="file"
+            id="file-input"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+          />
+        </div>
+        <p class="upload-hint">
+          ℹ️ For best results, use a clear, well-lit close-up photo of the skin lesion.
+        </p>
+      </section>
+
+      <!-- ===== PREDICTION RESULTS (hidden by default) ===== -->
+      <section class="results-section" id="results-section" hidden>
+
+        <!-- Two-column grid -->
+        <div class="results-grid">
+
+          <!-- Left: Image Preview -->
+          <div class="result-image-col">
+            <div class="image-preview-card">
+              <div class="image-card-header">
+                <span>🔬</span> Uploaded Lesion
+              </div>
+              <div class="image-wrapper">
+                <img id="preview-img" src="" alt="Uploaded skin lesion" class="preview-img" />
+              </div>
+              <div class="image-meta" id="image-meta">
+                <span id="file-name-display">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Prediction Results -->
+          <div class="result-info-col">
+            <h2 class="results-heading">🤖 Prediction Results</h2>
+
+            <!-- Dynamic Alert Box -->
+            <div class="diagnosis-alert" id="diagnosis-alert">
+              <div class="alert-icon" id="alert-icon">⏳</div>
+              <div class="alert-body">
+                <div class="alert-title" id="alert-title">Analyzing…</div>
+                <div class="alert-confidence" id="alert-confidence">Running AI model…</div>
+              </div>
+            </div>
+
+            <!-- Confidence Progress Bar -->
+            <div class="progress-wrapper">
+              <div class="progress-labels">
+                <span class="progress-label-left">Confidence Level</span>
+                <span class="progress-label-right" id="progress-pct">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Accordion: Detailed Breakdown -->
+            <div class="accordion" id="breakdown-accordion">
+              <button
+                class="accordion-header"
+                id="accordion-btn"
+                aria-expanded="false"
+                aria-controls="accordion-body"
+                type="button"
+              >
+                <span>📊 See Detailed Breakdown by Model</span>
+                <span class="accordion-arrow" id="accordion-arrow">▾</span>
+              </button>
+              <div class="accordion-body" id="accordion-body" hidden>
+                <div class="model-breakdown" id="model-breakdown">
+                  <div class="breakdown-row">
+                    <span class="breakdown-model">EfficientNetB3</span>
+                    <div class="breakdown-bar-track">
+                      <div class="breakdown-bar" id="eff-bar" style="width: 0%;"></div>
+                    </div>
+                    <span class="breakdown-pct" id="eff-pct">—</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span class="breakdown-model">DenseNet121</span>
+                    <div class="breakdown-bar-track">
+                      <div class="breakdown-bar densenet" id="den-bar" style="width: 0%;"></div>
+                    </div>
+                    <span class="breakdown-pct" id="den-pct">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Quick Insights -->
+            <div class="insights-box" id="insights-box">
+              <div class="insights-header">
+                <span>💡</span>
+                <strong>AI Quick Insights</strong>
+              </div>
+              <p class="insights-text" id="insights-text">
+                Awaiting analysis…
+              </p>
+            </div>
+          </div>
+
+        </div><!-- /results-grid -->
+
+        <!-- Reset button -->
+        <div class="results-footer">
+          <button class="reset-btn" id="reset-btn" type="button">↩ Analyze Another Image</button>
+        </div>
+
+      </section><!-- /results-section -->
+
+    </main><!-- /main-content -->
+
+  </div><!-- /app-wrapper -->
+
+  <script src="script.js"></script>
+</body>
+</html>
